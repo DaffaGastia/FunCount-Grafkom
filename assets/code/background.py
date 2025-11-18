@@ -99,4 +99,3 @@ for i in range(0, WIDTH, 50):
 # ========================
 surface.write_to_png("jungle_background.png")
 print("Background jungle pixel-art berhasil dibuat!")
-
