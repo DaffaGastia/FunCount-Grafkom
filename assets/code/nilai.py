@@ -65,5 +65,3 @@ for value in range(10, 110, 10):
     # Simpan file
     filename = f"assets/nilai{value}.png"
     surface.write_to_png(filename)
-
-    print(f"Saved: {filename}")

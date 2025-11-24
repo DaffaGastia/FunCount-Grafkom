@@ -44,6 +44,4 @@ def make():
     draw_symbol(ctx,"=",1550,cy)
 
     surface.write_to_png("assets/soalPenjumlahan9.png")
-    print("✔ Saved soalPenjumlahan9.png")
-
 make()

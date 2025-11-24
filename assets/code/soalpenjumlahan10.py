@@ -67,7 +67,5 @@ def make():
     draw_row(ctx, draw_banana, 5, 1250, cy)
     draw_symbol(ctx, "=", 1450, cy)
 
-    surface.write_to_png("assets/soalPengurangan10.png")
-    print("✔ Saved soalPengurangan10.png")
-
+    surface.write_to_png("assets/soalPenjumlahan10.png")
 make()
