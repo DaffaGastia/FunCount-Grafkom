@@ -72,9 +72,7 @@ def generate_button(num):
     ctx.move_to(tx, ty)
     ctx.show_text(text)
 
-    surface.write_to_png(filename)
-    print("Generated:", filename)
-
+    surface.write_to_png(f"assets/{filename}")
 
 # ============================
 # GENERATE 1 – 10
