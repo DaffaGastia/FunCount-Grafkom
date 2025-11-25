@@ -24,9 +24,9 @@ def draw_row(ctx,fn,count,cx,cy):
         fn(ctx,cx+spacing_x/2,cy-spacing_y/4,0.33)
         fn(ctx,cx-spacing_x/2,cy+spacing_y/4,0.33)
         fn(ctx,cx+spacing_x/2,cy+spacing_y/4,0.33)
-    # elif count==2:
-    #     fn(ctx,cx-spacing_x/2,cy,0.33)
-    #     fn(ctx,cx+spacing_x/2,cy,0.33)
+    elif count==2:
+        fn(ctx,cx-spacing_x/2,cy,0.33)
+        fn(ctx,cx+spacing_x/2,cy,0.33)
 
 def make():
     width,height=1700,700

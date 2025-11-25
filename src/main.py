@@ -8,7 +8,9 @@ SCREEN_HEIGHT = 450
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("FunCount")
 
+# =====================================
 # LOAD ASSETS
+# =====================================
 
 dashboard = pygame.image.load("assets/bg_utama.png").convert_alpha()
 dashboard = pygame.transform.scale(dashboard, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -20,7 +22,6 @@ welcome_img = pygame.image.load("assets/welcome.png").convert_alpha()
 welcome_img = pygame.transform.scale(welcome_img, (500, 170))
 welcome_rect = welcome_img.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 120))
 
-# Background halaman masing-masing mode
 bg_mh = pygame.image.load("assets/bg_menghitung.png").convert_alpha()
 bg_mh = pygame.transform.scale(bg_mh, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -29,7 +30,6 @@ bg_pj = pygame.transform.scale(bg_pj, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 bg_pg = pygame.image.load("assets/bg_pengurangan.png").convert_alpha()
 bg_pg = pygame.transform.scale(bg_pg, (SCREEN_WIDTH, SCREEN_HEIGHT))
-
 
 # START BUTTON
 button_start_original = pygame.image.load("assets/button_start.png").convert_alpha()
@@ -43,8 +43,7 @@ button_start_big = pygame.transform.scale(button_start_original, BIG_SIZE)
 button_start = button_start_small
 button_start_rect = button_start.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 40))
 
-
-# DASHBOARD MODE BUTTONS
+# DASHBOARD BUTTONS
 btn_mh_original = pygame.image.load("assets/button_menghitung.png").convert_alpha()
 btn_pj_original = pygame.image.load("assets/button_penjumlahan.png").convert_alpha()
 btn_pg_original = pygame.image.load("assets/button_pengurangan.png").convert_alpha()
@@ -66,8 +65,9 @@ btn_mh_rect = btn_mh.get_rect(center=(SCREEN_WIDTH // 2, 130))
 btn_pj_rect = btn_pj.get_rect(center=(SCREEN_WIDTH // 2, 250))
 btn_pg_rect = btn_pg.get_rect(center=(SCREEN_WIDTH // 2, 370))
 
-
+# =====================================
 # STATE SYSTEM
+# =====================================
 STATE_MENU_AWAL = 0
 STATE_DASHBOARD = 1
 STATE_MENGHITUNG = 2
@@ -76,19 +76,38 @@ STATE_PENGURANGAN = 4
 
 current_state = STATE_MENU_AWAL
 
+# =====================================
+# LOAD SOAL PENJUMLAHAN
+# =====================================
+soal_pj = []
+for i in range(1, 11):
+    img = pygame.image.load(f"assets/soalPenjumlahan{i}.png").convert_alpha()
+    img = pygame.transform.scale(img, (430, 210))
+    soal_pj.append(img)
+
+current_pj_level = 0
+
+# =====================================
+# LOAD SOAL PENGURANGAN
+# =====================================
+soal_pg = []
+for i in range(1, 11):
+    img = pygame.image.load(f"assets/soalPengurangan{i}.png").convert_alpha()
+    img = pygame.transform.scale(img, (430, 210))
+    soal_pg.append(img)
+
+current_pg_level = 0
 
 # =====================================
 # COUNTDOWN ASSET SYSTEM
 # =====================================
 countdown_imgs = {}
-
 for i in range(1, 11):
     img = pygame.image.load(f"assets/angka_{i}.png").convert_alpha()
     countdown_imgs[i] = pygame.transform.scale(img, (50, 50))
 
 countdown_start = None
 countdown_duration = 10  # 10 detik
-
 
 # =====================================
 # GAME LOOP
@@ -118,13 +137,14 @@ while running:
                 elif btn_pj_rect.collidepoint(mouse_pos):
                     current_state = STATE_PENJUMLAHAN
                     countdown_start = pygame.time.get_ticks()
+                    current_pj_level = 0
 
                 elif btn_pg_rect.collidepoint(mouse_pos):
                     current_state = STATE_PENGURANGAN
                     countdown_start = pygame.time.get_ticks()
+                    current_pg_level = 0
 
-
-    # =============== MENU AWAL ===============
+    # MENU AWAL
     if current_state == STATE_MENU_AWAL:
 
         if button_start_rect.collidepoint(mouse_pos):
@@ -138,8 +158,7 @@ while running:
         screen.blit(welcome_img, welcome_rect)
         screen.blit(button_start, button_start_rect)
 
-
-    # =============== DASHBOARD ===============
+    # DASHBOARD
     elif current_state == STATE_DASHBOARD:
 
         screen.blit(dashboard_blur, (0, 0))
@@ -156,42 +175,54 @@ while running:
         screen.blit(btn_pj, btn_pj_rect)
         screen.blit(btn_pg, btn_pg_rect)
 
-
-    # =============== MODE MENGHITUNG ===============
+    # MODE MENGHITUNG
     elif current_state == STATE_MENGHITUNG:
         screen.blit(bg_mh, (0, 0))
 
-
-    # =============== MODE PENJUMLAHAN ===============
+    # MODE PENJUMLAHAN
     elif current_state == STATE_PENJUMLAHAN:
 
         screen.blit(bg_pj, (0, 0))
 
+        # tampil soal
+        soal_img = soal_pj[current_pj_level]
+        rect = soal_img.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        screen.blit(soal_img, rect)
+
+        # countdown
         elapsed = (pygame.time.get_ticks() - countdown_start) // 1000
-        remaining = 10 - elapsed
+        remaining = countdown_duration - elapsed
 
         if remaining > 0:
             img = countdown_imgs.get(remaining)
-            rect = img.get_rect(topleft=(10, 10))   # pojok kiri atas
-            screen.blit(img, rect)
+            screen.blit(img, (10, 10))
         else:
-            current_state = STATE_DASHBOARD
+            current_pj_level += 1
+            if current_pj_level >= 10:
+                current_state = STATE_DASHBOARD
+            else:
+                countdown_start = pygame.time.get_ticks()
 
-
-    # =============== MODE PENGURANGAN ===============
+    # MODE PENGURANGAN
     elif current_state == STATE_PENGURANGAN:
 
         screen.blit(bg_pg, (0, 0))
 
+        soal_img = soal_pg[current_pg_level]
+        rect = soal_img.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        screen.blit(soal_img, rect)
+
         elapsed = (pygame.time.get_ticks() - countdown_start) // 1000
-        remaining = 10 - elapsed
+        remaining = countdown_duration - elapsed
 
         if remaining > 0:
             img = countdown_imgs.get(remaining)
-            rect = img.get_rect(topleft=(10, 10))   # pojok kiri atas
-            screen.blit(img, rect)
+            screen.blit(img, (10, 10))
         else:
-            current_state = STATE_DASHBOARD
-
+            current_pg_level += 1
+            if current_pg_level >= 10:
+                current_state = STATE_DASHBOARD
+            else:
+                countdown_start = pygame.time.get_ticks()
 
     pygame.display.update()
