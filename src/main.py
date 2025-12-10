@@ -478,10 +478,7 @@ while running:
                                 pg_hover_alpha = [0, 0, 0]
                         break
 
-    # =====================================
     # RENDERING
-    # =====================================
-
     if current_state == STATE_MENU_AWAL:
         screen.blit(dashboard, (0, 0))
         screen.blit(welcome_img, welcome_rect)
@@ -705,9 +702,7 @@ while running:
                         pg_time_start  = None
                         pg_hover_alpha = [0, 0, 0]
 
-    # ---------------------------
     # POPUP WIN (DENGAN ANIMASI)
-    # ---------------------------
     elif current_state == STATE_POPUP_WIN:
         if last_quiz_mode == "pj":
             screen.blit(bg_pj, (0, 0))
@@ -732,9 +727,7 @@ while running:
             else:
                 reset_pengurangan_to_dashboard()
 
-    # ---------------------------
     # POPUP LOSE (DENGAN ANIMASI)
-    # ---------------------------
     elif current_state == STATE_POPUP_MOTIVASI:
         if last_quiz_mode == "pj":
             screen.blit(bg_pj, (0, 0))
@@ -759,10 +752,7 @@ while running:
             else:
                 reset_pengurangan_to_dashboard()
 
-
-            # ---------------------------
     # POPUP LOSE (DENGAN ANIMASI)
-    # ---------------------------
     elif current_state == STATE_POPUP_LOSE:
         # Tampilkan background sesuai mode terakhir
         if last_quiz_mode == "pj":
@@ -791,15 +781,11 @@ while running:
             else:
                 reset_pengurangan_to_dashboard()
                 
-    # ---------------------------
     # NORMALISASI EKSPRESI MASKOT
-    # ---------------------------
     if maskot_state in ("happy", "sad"):
         if pygame.time.get_ticks() - maskot_change_time > MASKOT_DURATION:
             current_maskot = maskot_normal
             maskot_state = "normal"
 
-    # ---------------------------
     # UPDATE LAYAR
-    # ---------------------------
     pygame.display.update()
